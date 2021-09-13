@@ -107,6 +107,7 @@ const App: () => Node = () => {
 };
 
 
+
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
