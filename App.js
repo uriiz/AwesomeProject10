@@ -18,8 +18,9 @@ import {
   TextInput,
   useColorScheme,
   View,
+  Alert,
 } from 'react-native';
-
+import notifee from '@notifee/react-native';
 import {
   Colors,
   Header,
@@ -58,6 +59,32 @@ const Section = ({ children, title }): Node => {
 const App: () => Node = () => {
 
 
+  async function testt() {
+    const batteryOptimizationEnabled = await notifee.isBatteryOptimizationEnabled();
+   
+    if (batteryOptimizationEnabled) {
+      // 2. ask your users to disable the feature
+      Alert.alert(
+        'Restrictions Detected',
+        'To ensure notifications are delivered, please disable battery optimization for the app.',
+        [
+          // 3. launch intent to navigate the user to the appropriate screen
+          {
+            text: 'OK, open settings',
+            onPress: async () => await notifee.openBatteryOptimizationSettings(),
+          },
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+        ],
+        { cancelable: false }
+      );
+    };
+  }
+
+
   const isDarkMode = useColorScheme() === 'dark';
   const [number, onChangeNumber] = React.useState(null);
   const backgroundStyle = {
@@ -77,6 +104,7 @@ const App: () => Node = () => {
 
   useEffect(() => {
     getTokenDevice();
+    testt()
   }, []);
 
 
@@ -96,7 +124,7 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-       
+
           <TextInput
             value={number}
           />
